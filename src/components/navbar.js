@@ -1,34 +1,65 @@
-import React from 'react';
-import {Link } from 'react-router-dom';
-
+import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 
 function Navbar(props) {
-    const homeLink = 
-    <Link style={{
-        color: 'black', 
-        backgroundColor: 'pink', 
-        padding: 10}} to='/' >
-        Home
-    </Link>
-   const crudLink =  <Link style={{
-        color: 'black', 
+  const [navTitle, setNavTitle] = useState('Home Screen');
+
+  const homeLink = (
+    <Link
+      style={{
+        color: 'black',
         backgroundColor: 'pink',
         padding: 10,
-        marginLeft: 10
-      }} to='/crud' >
-   Add item
-        </Link>
-    return (
-        <nav className='navbar'>
-            <div className='navTitle'><p>Home Screen</p></div>
-            <div className='links'>
-                {homeLink}
-                {crudLink}
-            </div> 
+      }}
+      to="/"
+      onClick={() => setNavTitle('Home Screen')}
+    >
+      Home
+    </Link>
+  );
 
-        </nav>
+  const crudLink = (
+    <Link
+      style={{
+        color: 'black',
+        backgroundColor: 'pink',
+        padding: 10,
+        marginLeft: 10,
+      }}
+      to="/crud"
+      onClick={() => setNavTitle('Add Item')}
+    >
+      Add Item
+    </Link>
+  );
 
-    );
+  const tableLink = (
+    <Link
+      style={{
+        color: 'black',
+        backgroundColor: 'pink',
+        padding: 10,
+        marginLeft: 10,
+      }}
+      to="/table"
+      onClick={() => setNavTitle('Table Crud')}
+    >
+      Table Crud
+    </Link>
+  );
+
+  return (
+    <nav className="navbar">
+      <div className="navTitle">
+        <p>{navTitle}</p>
+      </div>
+      <div className="links">
+        {homeLink}
+        {crudLink}
+        {tableLink}
+      </div>
+    </nav>
+  );
 }
 
 export default Navbar;

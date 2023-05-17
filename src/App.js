@@ -22,7 +22,7 @@ function App() {
             <Route exact path="/crud">
               <Crud />
             </Route>
-            <Route exact path="/table/:dynamic">
+            <Route exact path="/table">
               <Table />
             </Route>
           </Switch>
