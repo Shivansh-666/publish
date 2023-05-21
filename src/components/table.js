@@ -83,6 +83,7 @@ function Table() {
     closeModal();
   };
 
+ 
   const openImageModal = (image) => {
     setSelectedImage(image);
   };
@@ -90,6 +91,28 @@ function Table() {
   const closeImageModal = () => {
     setSelectedImage(null);
   };
+
+  useEffect(() => {
+    // Load stored user data on component mount
+    loadData();
+  }, []);
+
+  useEffect(() => {
+    // Save user data whenever it changes
+    saveData(userData);
+  }, [userData]);
+
+  const loadData = () => {
+    const storedData = localStorage.getItem("userData");
+    if (storedData) {
+      setUserData(JSON.parse(storedData));
+    }
+  };
+
+  const saveData = (data) => {
+    localStorage.setItem("userData", JSON.stringify(data));
+  };
+
 
   return (
     <div>
