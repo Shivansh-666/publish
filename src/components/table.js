@@ -7,15 +7,17 @@ import "./crudStyle.css";
 function Table() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [userData, setUserData] = useState([]);
-  const [editIndex, setEditIndex] = useState(-1); // Initialize with -1 to indicate no row is being edited
+  const [editIndex, setEditIndex] = useState(-1); 
   const [selectedImage, setSelectedImage] = useState(null);
+  const [userImage, setImage] = useState();
+
 
   const initialValues = {
     fname: "",
     lname: "",
     email: "",
     password: "",
-    image: null,
+    image: "",
   };
 
   const validationSchema = Yup.object({
@@ -52,6 +54,7 @@ function Table() {
     setIsModalOpen(true);
   };
 
+  
   const closeModal = () => {
     setIsModalOpen(false);
     formik.resetForm();
@@ -83,7 +86,6 @@ function Table() {
     closeModal();
   };
 
- 
   const openImageModal = (image) => {
     setSelectedImage(image);
   };
@@ -112,6 +114,7 @@ function Table() {
   const saveData = (data) => {
     localStorage.setItem("userData", JSON.stringify(data));
   };
+
 
 
   return (
@@ -167,15 +170,16 @@ function Table() {
               />
               {formik.touched.password && formik.errors.password && (
                 <div className="error">{formik.errors.password}</div>
-              )}
+              )}  
 
-              <input
-                type="file"
-                name="image"
-                onChange={(event) => {
-                  formik.setFieldValue("image", event.currentTarget.files[0]);
-                }}
-              />
+            <input type="file" accepts="image/*" onChange={ e => {
+                const file = e.target.files[0]; // this Object holds a reference to the file on disk
+                const url = URL.createObjectURL(file); // this points to the File object we just created
+              setImage(url)
+              
+              formik.setFieldValue("image", url);
+              }} />
+
               {formik.touched.image && formik.errors.image && (
                 <div className="error">{formik.errors.image}</div>
               )}
@@ -200,7 +204,7 @@ function Table() {
             <th>First Name</th>
             <th>Last Name</th>
             <th>Email</th>
-            <th>Password</th>
+            
             <th>Image</th>
             <th>Actions</th>
           </tr>
@@ -211,21 +215,23 @@ function Table() {
               <td>{user.fname}</td>
               <td>{user.lname}</td>
               <td>{user.email}</td>
-              <td>{user.password}</td>
-              <td className="image-cell">
-                {user.image && (
+              
+              <td className="image-cell" id="tdImageCell">
+                {user?.image   && (
                   <ModalImage
-                    small={URL.createObjectURL(user.image)}
-                    large={URL.createObjectURL(user.image)}
+                    small={user?.image}
+                    large={user?.image}
                     alt="User Profile"
-                    onClick={() => openImageModal(user.image)}
-                  />
+                    onClick={() => openImageModal(user?.image)}
+                  /> 
                 )}
+                
               </td>
               <td>
                 <button onClick={() => deleteUser(index)}>Delete</button>
                 <button onClick={() => editUser(index)}>Edit User</button>
               </td>
+             
             </tr>
           ))}
         </tbody>
@@ -235,7 +241,7 @@ function Table() {
           <div className="modal-overlay" onClick={closeImageModal}></div>
           <div className="modal-content">
             <img
-              src={URL.createObjectURL(selectedImage)}
+              src={userImage}
               alt="User Profile"
               className="enlarged-image"
             />
